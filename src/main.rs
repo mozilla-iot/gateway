@@ -22,7 +22,7 @@ use crate::{
     addon_manager::{AddonManager, LoadAddons},
     db::Db,
 };
-use actix::{System, SystemService};
+use actix::SystemService;
 use rocket::{Build, Rocket};
 
 fn rocket() -> Rocket<Build> {
@@ -31,24 +31,16 @@ fn rocket() -> Rocket<Build> {
         .mount("/", router::routes())
 }
 
-#[rocket::main]
+#[actix_web::main]
 async fn main() {
-    tokio::spawn(async {
-        let system = System::new("default");
-
-        actix::spawn(async {
-            addon_socket::start().await.expect("Starting addon socket");
-        });
-
-        actix::spawn(async {
-            AddonManager::from_registry()
-                .send(LoadAddons)
-                .await
-                .expect("Sending LoadAddons message ");
-        });
-
-        system.run().expect("Running system");
+    actix::spawn(async {
+        addon_socket::start().await.expect("Starting addon socket");
     });
+
+    AddonManager::from_registry()
+        .send(LoadAddons)
+        .await
+        .expect("Sending LoadAddons message ");
 
     rocket()
         .ignite()

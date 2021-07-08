@@ -16,9 +16,9 @@ semver = "1.0.3"
 futures = "0.3"
 regex = "1.5.4"
 webthings-gateway-ipc-types = "1.0.0-alpha.2"
-actix = "0.10"
-actix-web = "3"
-actix-web-actors = "3.0.0"
+actix = "0.12"
+actix-web = "4.0.0-beta.8"
+actix-web-actors = "4.0.0-beta.6"
 tokio = "1.8.1"
 
 [dependencies.rocket]
